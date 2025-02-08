@@ -2,7 +2,44 @@
 
 using namespace std;
 
+struct nodo{
+    char nombre;//nombre del vertice o nodo
+    struct nodo *siguiente;
+    struct arista *adyacencia;//puntero - primera arista del nodo
+};
+
+struct arista{
+    struct nodo *destino;//puntero al nodo llegada
+    struct arista *siguiente;
+};
+
+typedef struct nodo *Tnodo;// Nodo
+typedef struct arista *Tarista; // Arista
+
+Tnodo p;//puntero cabeza
+
 void menu();
+void insertar_nodo();
+
+///Insertar nodo
+void insertar_nodo(){
+    Tnodo t,nuevo=new struct nodo;
+    cout<<"INGRESE VARIABLE:";
+    cin>>nuevo->nombre;
+    nuevo->siguiente = NULL;
+    nuevo->adyacencia=NULL;
+    if(p==NULL){
+        p = nuevo;
+        cout<<"PRIMER NODO";
+    }else {
+        t = p;
+        while(t->siguiente!=NULL){
+        t = t->siguiente;
+        }   
+    t->siguiente = nuevo;
+    cout<<"NODO INGRESADO";
+    }
+}
 
 void menu(){
     cout<<"\tGRAFO DIRIGIDO\n\n";
@@ -24,41 +61,31 @@ int main(){
         cin>>opcion;
         switch(opcion){
             case 1:{
-                cout<<"Opcion 1";
-                system("pause");
-                system("cls");
+                insertar_nodo();
                 break;
             }
             case 2:{
                 cout<<"Opcion 2";
-                system("pause");
-                system("cls");
                 break;
             }
             case 3:{
                 cout<<"Opcion 3";
-                system("pause");
-                system("cls");
                 break;
             }
             case 4:{
                 cout<<"Opcion 4";
-                system("pause");
-                system("cls");
                 break;
             }
             case 7:{
                 cout<<"Que tenga buen dia";
-                system("pause");
-                system("cls");
                 break;
             }
             default:{
                 cout<<"Opcion no valida, intenta de nuevo";
-                system("pause");
-                system("cls");
                 break;
             }
+            system("pause");
+            system("cls");
         }
     }
     system("pause");
