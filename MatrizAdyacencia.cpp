@@ -20,6 +20,8 @@ Tnodo p;//puntero cabeza
 
 void menu();
 void insertar_nodo();
+void agregar_aristas(Tnodo &, Tnodo &, Tarista &);
+void insertar_arista();
 
 ///Insertar nodo
 void insertar_nodo(){
@@ -38,6 +40,50 @@ void insertar_nodo(){
         }   
     t->siguiente = nuevo;
     cout<<"NODO INGRESADO";
+    }
+}
+
+///Agregar aristas
+void agregar_aristas(Tnodo &aux, Tnodo &aux2, Tarista &nuevo){
+    Tarista q;
+    if(aux->adyacencia==NULL){
+        aux->adyacencia=nuevo;
+        nuevo->destino=aux2;
+        cout<<"PRIMERA ARISTA";
+    }
+    else{
+        q=aux->adyacencia;
+        while(q->siguiente!=NULL)
+            q=q->siguiente;
+        nuevo->destino=aux2;
+        q->siguiente=nuevo;
+        cout<<"ARISTA AGREGADA";
+    }
+}
+
+///Insertar aristas
+void insertar_arista(){
+    char ini, fin;
+    Tarista nuevo=new struct arista;
+    Tnodo aux, aux2;
+    if(p==NULL) { cout<<"GRAFO VACIO"; return;}
+    nuevo->siguiente=NULL;
+    cout<<"INGRESE NODO DE INICIO:";
+    cin>>ini;
+    cout<<"INGRESE NODO FINAL:";
+    cin>>fin;
+    aux=p;
+    aux2=p;
+    while(aux2!=NULL){
+        if(aux2->nombre==fin) { break;}
+        aux2=aux2->siguiente;
+    }
+    while(aux!=NULL){
+        if(aux->nombre==ini){
+            agregar_aristas(aux,aux2, nuevo);
+            return;
+        }
+        aux = aux->siguiente;
     }
 }
 
@@ -65,7 +111,7 @@ int main(){
                 break;
             }
             case 2:{
-                cout<<"Opcion 2";
+                insertar_arista();
                 break;
             }
             case 3:{
