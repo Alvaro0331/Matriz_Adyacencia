@@ -22,6 +22,7 @@ void menu();
 void insertar_nodo();
 void agregar_aristas(Tnodo &, Tnodo &, Tarista &);
 void insertar_arista();
+void mostrar_grafo();
 
 ///Insertar nodo
 void insertar_nodo(){
@@ -87,6 +88,27 @@ void insertar_arista(){
     }
 }
 
+///Mostrar grafo
+void mostrar_grafo(){
+    Tnodo ptr;
+    Tarista arista;
+    ptr=p;
+    cout<<"NODO|LISTA DE ADYACENCIA\n";
+    while(ptr!=NULL){
+        cout<<" "<<ptr->nombre<<"|";
+        if(ptr->adyacencia!=NULL){
+            arista=ptr->adyacencia;
+            while(arista!=NULL){
+                cout<<" "<<arista->destino->nombre;
+                arista=arista->siguiente;
+            }
+
+        }
+         ptr=ptr->siguiente;
+        cout<<endl;
+    }
+}
+
 void menu(){
     cout<<"\tGRAFO DIRIGIDO\n\n";
     cout<<"1. INSERTAR NODO"<<endl;
@@ -115,7 +137,7 @@ int main(){
                 break;
             }
             case 3:{
-                cout<<"Opcion 3";
+                mostrar_grafo();
                 break;
             }
             case 4:{
