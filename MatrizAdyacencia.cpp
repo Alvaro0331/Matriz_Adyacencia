@@ -22,6 +22,8 @@ void menu();
 void insertar_nodo();
 void agregar_aristas(Tnodo &, Tnodo &, Tarista &);
 void insertar_arista();
+void eliminar_arista();
+void vaciar_aristas(Tnodo &);
 void mostrar_grafo();
 
 ///Insertar nodo
@@ -88,6 +90,57 @@ void insertar_arista(){
     }
 }
 
+///Eliminar aristas
+void eliminar_arista(){
+    char ini, fin;
+    cout << "INGRESE NODO DE INICIO: ";
+    cin >> ini;
+    cout << "INGRESE NODO FINAL: ";
+    cin >> fin;
+
+    Tnodo aux = p;
+
+    // Buscar el nodo de inicio en la lista de nodos
+    while (aux != NULL) {
+        if (aux->nombre == ini) {
+            Tarista actual = aux->adyacencia;
+            Tarista anterior = NULL;
+
+            // Recorrer la lista
+            while (actual != NULL) {
+                if (actual->destino->nombre == fin) {
+                    // Si la arista es la primera en la lista de adyacencias
+                    if (anterior == NULL) {
+                        aux->adyacencia = actual->siguiente;
+                    } else {
+                        anterior->siguiente = actual->siguiente;
+                    }
+                    delete actual; // Eliminar la arista
+                    cout << "ARISTA ELIMINADA CORRECTAMENTE." << endl;
+                    return;
+                }
+                anterior = actual;
+                actual = actual->siguiente;
+            }
+            cout << "LA ARISTA NO EXISTE EN ESTE NODO." << endl;
+            return;
+        }
+        aux = aux->siguiente;
+    }
+    cout << "NODO INICIO NO ENCONTRADO." << endl;
+}
+
+//Vaciar aristas
+void vaciar_aristas(Tnodo &aux){
+    Tarista q,r;
+    q=aux->adyacencia;
+    while(q->siguiente!=NULL){
+        r=q;
+        q=q->siguiente;
+        delete(r);
+    }
+}
+
 ///Mostrar grafo
 void mostrar_grafo(){
     Tnodo ptr;
@@ -114,7 +167,8 @@ void menu(){
     cout<<"1. INSERTAR NODO"<<endl;
     cout<<"2. INSERTAR ARISTA"<<endl;
     cout<<"3. MOSTRAR GRAFO"<<endl;
-    cout<<"4. MOSTRAR MATRIZ"<<endl;
+    cout<<"4. ELIMINAR ARISTA"<<endl;
+    cout<<"5. MOSTRAR MATRIZ"<<endl;
     cout<<"7. SALIR"<<endl;
     cout<<"\nINGRESA OPCION: ";
 }
@@ -141,7 +195,7 @@ int main(){
                 break;
             }
             case 4:{
-                cout<<"Opcion 4";
+                eliminar_arista();
                 break;
             }
             case 7:{
@@ -152,9 +206,9 @@ int main(){
                 cout<<"Opcion no valida, intenta de nuevo";
                 break;
             }
-            system("pause");
-            system("cls");
         }
+        system("pause");
+        system("cls");
     }
     system("pause");
     return 0;
