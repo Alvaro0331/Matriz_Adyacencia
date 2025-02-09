@@ -28,6 +28,7 @@ void mostrar_grafo();
 void eliminar_nodo();
 void eliminar_aristas_nodo(Tnodo nodo);
 void mostrar_aristas();
+void mostrar_matriz();
 
 ///Insertar nodo
 void insertar_nodo(){
@@ -262,6 +263,79 @@ void mostrar_grafo(){
     }
 }
 
+///Mostrar matriz
+void mostrar_matriz() {
+    //Contar nodos y almacenarlos en un arreglo
+    int cantidad = 0;
+    Tnodo aux = p;
+    while(aux != NULL) {
+        cantidad++;
+        aux = aux->siguiente;
+    }
+    if(cantidad == 0) {
+        cout << "GRAFO VACÍO." << endl;
+        return;
+    }
+
+    // Crear un arreglo dinámico para almacenar los punteros a nodos
+    Tnodo* nodosArray = new Tnodo[cantidad];
+    aux = p;
+    for (int i = 0; i < cantidad; i++) {
+        nodosArray[i] = aux;
+        aux = aux->siguiente;
+    }
+
+    //Crear e inicializar la matriz de adyacencia
+    int **matriz = new int*[cantidad];
+    for(int i = 0; i < cantidad; i++){
+        matriz[i] = new int[cantidad];
+        for(int j = 0; j < cantidad; j++){
+            matriz[i][j] = 0;
+        }
+    }
+
+    //Rellenar la matriz
+    for (int i = 0; i < cantidad; i++) {
+        Tarista aristaPtr = nodosArray[i]->adyacencia;
+        while (aristaPtr != NULL) {
+            // Buscar el índice del nodo destino en el arreglo
+            int j = 0;
+            for (; j < cantidad; j++) {
+                if (nodosArray[j] == aristaPtr->destino)
+                    break;
+            }
+            if(j < cantidad)
+                matriz[i][j] = 1; // Marca la existencia de la arista
+            aristaPtr = aristaPtr->siguiente;
+        }
+    }
+
+    //Imprimir la matriz de adyacencia
+    cout << "\nMATRIZ DE ADYACENCIA:\n\n";
+    //Imprimir cabecera (nombres de columnas)
+    cout << "     ";
+    for (int j = 0; j < cantidad; j++) {
+        cout << " " << nodosArray[j]->nombre << " ";
+    }
+    cout << "\n";
+
+    //Imprimir cada fila
+    for (int i = 0; i < cantidad; i++) {
+        cout << " " << nodosArray[i]->nombre << "  ";
+        for (int j = 0; j < cantidad; j++) {
+            cout << " " << matriz[i][j] << " ";
+        }
+        cout << "\n";
+    }
+
+    //Liberar la memoria asignada para la matriz y el arreglo de nodos
+    for (int i = 0; i < cantidad; i++) {
+        delete[] matriz[i];
+    }
+    delete[] matriz;
+    delete[] nodosArray;
+}
+
 void menu(){
     cout<<"\tGRAFO DIRIGIDO\n\n";
     cout<<"1. INSERTAR NODO"<<endl;
@@ -279,7 +353,7 @@ void menu(){
 int main(){
     int opcion=0;
 
-    while(opcion!=7){
+    while(opcion!=8){
         menu();
         cout.flush();
         cin>>opcion;
@@ -309,7 +383,11 @@ int main(){
                 break;
             }
             case 7:{
-                cout<<"Que tenga buen dia";
+                mostrar_matriz();
+                break;
+            }
+            case 8:{
+                cout<<"Que tenga buen dia"<<endl;
                 break;
             }
             default:{
