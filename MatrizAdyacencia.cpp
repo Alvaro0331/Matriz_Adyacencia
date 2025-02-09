@@ -25,6 +25,9 @@ void insertar_arista();
 void eliminar_arista();
 void vaciar_aristas(Tnodo &);
 void mostrar_grafo();
+void eliminar_nodo();
+void eliminar_aristas_nodo(Tnodo nodo);
+void mostrar_aristas();
 
 ///Insertar nodo
 void insertar_nodo(){
@@ -141,6 +144,103 @@ void vaciar_aristas(Tnodo &aux){
     }
 }
 
+///Eliminar nodo
+void eliminar_nodo(){
+    char nombre;
+    cout << "INGRESE EL NODO A ELIMINAR: ";
+    cin >> nombre;
+
+    Tnodo aux = p, anterior = NULL;
+
+    // Buscar el nodo en la lista de nodos
+    while (aux != NULL) {
+        if (aux->nombre == nombre) {
+            //Eliminar aristas del nodo
+            eliminar_aristas_nodo(aux);
+            Tarista arista = aux->adyacencia;
+            while (arista != NULL) {
+                Tarista temp = arista;
+                arista = arista->siguiente;
+                delete temp;
+            }
+
+            //Eliminar el nodo de la lista
+            if (anterior == NULL) {
+                p = aux->siguiente; //Primer elemento
+            } else {
+                anterior->siguiente = aux->siguiente;
+            }
+
+            delete aux; // Eliminar el nodo
+            cout << "NODO ELIMINADO CORRECTAMENTE." << endl;
+            return;
+        }
+        anterior = aux;
+        aux = aux->siguiente;
+    }
+    cout << "NODO NO ENCONTRADO." << endl;
+}
+
+///Eliminar aristas de un nodo
+void eliminar_aristas_nodo(Tnodo nodo){
+    Tnodo aux = p; // Apunta al primer nodo del grafo
+
+    while (aux != NULL) {
+        Tarista actual = aux->adyacencia;
+        Tarista anterior = NULL;
+
+        while (actual != NULL) {
+            if (actual->destino == nodo) {
+                //Buscar si la arista es la primera
+                if (anterior == NULL) {
+                    aux->adyacencia = actual->siguiente;
+                } else {
+                    anterior->siguiente = actual->siguiente;
+                }
+                delete actual; // Eliminar la arista
+                actual = (anterior == NULL) ? aux->adyacencia : anterior->siguiente;
+            } else {
+                anterior = actual;
+                actual = actual->siguiente;
+            }
+        }
+        aux = aux->siguiente;
+    }
+}
+
+///Mostrar aristas de un nodo
+void mostrar_aristas(){
+    char nodo;
+    cout << "INGRESE EL NODO A CONSULTAR: ";
+    cin >> nodo;
+
+    Tnodo aux = p;
+
+    // Buscar el nodo en la lista de nodos
+    while (aux != NULL) {
+        if (aux->nombre == nodo) {
+            cout << "NODO " << nodo << " | LISTA DE ADYACENCIA: ";
+            
+            // Verificar si tiene aristas
+            if (aux->adyacencia == NULL) {
+                cout << "SIN ARISTAS." << endl;
+                return;
+            }
+
+            Tarista arista = aux->adyacencia;
+            while (arista != NULL) {
+                cout << arista->destino->nombre << " ";
+                arista = arista->siguiente;
+            }
+            cout << endl;
+            return;
+        }
+        aux = aux->siguiente;
+    }
+
+    cout << "NODO NO ENCONTRADO." << endl;
+}
+
 ///Mostrar grafo
 void mostrar_grafo(){
     Tnodo ptr;
@@ -167,9 +267,11 @@ void menu(){
     cout<<"1. INSERTAR NODO"<<endl;
     cout<<"2. INSERTAR ARISTA"<<endl;
     cout<<"3. MOSTRAR GRAFO"<<endl;
-    cout<<"4. ELIMINAR ARISTA"<<endl;
-    cout<<"5. MOSTRAR MATRIZ"<<endl;
-    cout<<"7. SALIR"<<endl;
+    cout<<"4. MOSTRAR ARISTAS DE UN NODO"<<endl;
+    cout<<"5. ELIMINAR ARISTA"<<endl;
+    cout<<"6. ELIMINAR NODO"<<endl;
+    cout<<"7. MOSTRAR MATRIZ"<<endl;
+    cout<<"8. SALIR"<<endl;
     cout<<"\nINGRESA OPCION: ";
 }
 
@@ -195,7 +297,15 @@ int main(){
                 break;
             }
             case 4:{
+                mostrar_aristas();
+                break;
+            }
+            case 5:{
                 eliminar_arista();
+                break;
+            }
+            case 6:{
+                eliminar_nodo();
                 break;
             }
             case 7:{
@@ -207,9 +317,6 @@ int main(){
                 break;
             }
         }
-        system("pause");
-        system("cls");
     }
-    system("pause");
     return 0;
 }
